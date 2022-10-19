@@ -9,6 +9,8 @@ Electrical & Computer Engineering, National Technical University of Athens, in
 cooperation with [Arrikto](https://www.arrikto.com/) Inc.
 
 You can read the final thesis text [here](thesis-template/thesis.pdf).
+You can find the presentation slides
+[here](https://docs.google.com/presentation/d/e/2PACX-1vQtrnZw_AI2M1BmCqnwRVSMI4CfwQLy0YyM2fEDIavuARi_JdKWRpt8KCHrfT_-QHfqhOAkGT4oOnAS/pub?start=false&loop=false&delayms=3000).
 
 Grigoris P. Thanasoulas  
 Electrical and Computer Engineer, MEng
