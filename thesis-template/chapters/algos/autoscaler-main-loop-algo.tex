@@ -1,0 +1,35 @@
+\begin{algorithm}[H]
+  \caption{Cluster Autoscaler: The main loop - RunOnce() method}\label{alg:autoscaler-main-loop}
+  \begin{enumerate}[leftmargin=0cm]
+    \tightlist
+    \item
+          \texttt{unschedulablePods} \lar Select Pods that do not have \texttt{spec.nodeName} set.
+    \item
+          \texttt{scheduledPods} \lar Select Pods that have \co{spec.nodeName} set.
+    \item
+          \texttt{allNodes} \lar List all the nodes of the cluster, by calling \co{ObtainNodesList()}.
+    \item
+          \texttt{readyNodes} \lar List the Ready nodes of the cluster, by calling \co{ObtainNodesList()}.
+
+    \item
+          \co{nodeGroups} \lar List the registered node groups of the cluster from the cloud provider.
+    \item
+          Take a snapshot of the cluster.
+    \item
+          For every node group in \co{nodeGroups}, generate its template node.
+    \item For each node group in \co{nodeGroups} calculate the number of
+          upcoming nodes (nodes that the Autoscaler has asked to be added but
+          are not yet in the cluster) and add the same number of the node
+          group's template nodes in the cluster snapshot.
+    \item
+          Run a scheduling simulation with the current cluster snapshot to determine if any of the \texttt{unschedulablePods} can be scheduled on the upcoming nodes.
+    \item \lIf{any Pod in \co{unschedulablePods} is considered as schedulable in
+            the simulation}{disable the scale-down for the current loop}
+    \item \co{unschedulablePodsToHelp} \lar Pods from \co{unschedulablePods} that remained unschedulable in the simulation.
+    \item \lIf{\co{unschedulablePodsToHelp} is empty}{do not scale-up}
+    \item
+          Else, try to scale-up, by calling \co{ScaleUp()}.
+    \item
+          \lIf{no scale-up was attempted}{proceed with the scale-down evaluation}
+  \end{enumerate}
+\end{algorithm}

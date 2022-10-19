@@ -1,0 +1,3 @@
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qsubsubsection\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\Q.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QΤο Container Storage Interface (CSI) είναι ένα πρότυπο για την έκθεση συστημάτων block αποθήκευσης και συστημάτων αποθήκευσης αρχείων σε φορτία εργασίας που τρέχουν σε containers, τα οποία διαχειρίζεται ένας ενορχήστρωσης containers (COs) όπως ο Kubernetes.\\E$"}

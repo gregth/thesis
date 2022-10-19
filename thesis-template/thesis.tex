@@ -1,0 +1,189 @@
+%
+% Main document
+%
+
+\documentclass[12pt,a4paper,twoside,titlepage]{book}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+    \newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\usepackage{multirow}
+
+% Packages
+\usepackage{alltt}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{setspace}
+\usepackage{paralist}
+\usepackage[margin=3cm,bindingoffset=20pt,twoside,a4paper]{geometry}
+
+\usepackage[greek,english]{babel}
+% This will also wrap the \texttt
+\usepackage[htt]{hyphenat}
+\usepackage[]{hyphenat}
+\usepackage{tocvsec2}
+
+\usepackage{./styles/thesis-ntua}   % NTUA compliant title page
+
+% Fancy chapter headings - https://ftp.cc.uoc.gr/mirrors/CTAN/macros/latex/contrib/fncychap/fncychap.pdf
+\usepackage[Bjornstrup]{fncychap}
+\ChTitleVar{\raggedleft\Huge\bfseries}
+
+% Fancy captions - https://ftp.cc.uoc.gr/mirrors/CTAN/macros/latex/contrib/caption/caption.pdf
+\usepackage[margin=20pt,font=small,labelfont=bf,textfont=it]{caption}
+
+% Common LaTeX code
+\include{thesis-common}
+
+% Set numbered subsections
+\setcounter{secnumdepth}{5}
+
+%\usepackage[hypertexnames=false,pdfborderstyle={/S/U/W 1}]{hyperref}
+\usepackage[hypertexnames=false,pdfborderstyle={/S/U/W 1}]{hyperref}
+\hypersetup{%
+	citebordercolor=gray,
+	filebordercolor=gray,
+	linkbordercolor=gray,
+	menubordercolor=gray,
+	runbordercolor=gray,
+	urlbordercolor=gray,
+	pdftitle={Extensions for Scheduling and Autoscaling on Kubernetes Clusters with Local Storage},
+	pdfauthor={Grigorios Thanasoulas gregthanasoulas@gmail.com},
+	pdfsubject={Diploma Thesis},
+	pdfkeywords={Kubernetes, Scheduler, Autoscaler, Local Storage},
+} 
+
+% Formatting options for extended enumerated lists
+\renewcommand*\paradescriptionlabel[1]{ \normalfont\itshape #1}
+
+\newcommand{\EN}[1]{\foreignlanguage{english}{#1}}
+\newcommand{\en}[1]{\foreignlanguage{english}{#1}}
+
+% Setup LaTeX code
+\include{thesis-setup}
+
+%
+% Document
+%
+
+% https://tex.stackexchange.com/questions/492175/how-to-generate-list-of-abbreviations-in-latex
+%\usepackage[printonlyused,withpage]{acronym}
+\usepackage[withpage,nohyperlinks]{acronym}
+
+
+\usepackage{./static/var/listings-golang}
+
+\begin{document}
+
+\selectlanguage{greek} % forces language specific hyphenation
+\frontmatter
+
+% TODO IMPORTANT: LINE BREAK
+\maketitle
+
+% Dutch style of paragraph formatting, i.e., no indents.
+\setlength{\parskip}{1.3ex plus 0.2ex minus 0.2ex}
+\setlength{\parindent}{0pt}
+
+% Line spacing
+\setstretch{1.4}
+
+% Inscription
+\emptypage
+   ~
+   \vfill
+   \begin{flushright}
+	\textit{στους γονείς μου,\\στα αδέλφια μου,\\στα παιδιά που ονειρεύονται}\\
+   \end{flushright}
+   \vfill
+   %\begin{flushright}
+   	%\textit{What we call the beginning is often the end.}\\
+	%\textit{And to make an end is to make a beginning.}\\
+	%\textit{The end is where we start from.}
+	%
+	%\textit{--- T.S. Eliot}
+
+   %\end{flushright}
+
+   \vfill
+
+\emptypage
+   ~
+   \vfill
+   {\small
+   Η στοιχειοθεσία του κειμένου έγινε με το \XeTeX~\the\XeTeXversion\XeTeXrevision.\\
+   Χρησιμοποιήθηκαν οι γραμματοσειρές Minion Pro, Myriad Pro και \texttt{Consolas}.
+   }
+
+\selectlanguage{greek} % forces language specific hyphenation
+\input{./front_chapters/ch_01_gr-abstract}
+
+\selectlanguage{english}
+\input{./front_chapters/ch_02_abstract}
+
+\selectlanguage{greek}
+\input{./front_chapters/ch_03_foreword}
+
+\selectlanguage{english}
+{\setlength{\parskip}{0ex plus 0.5ex minus 0.5ex}\tableofcontents}
+%{\setlength{\parskip}{0ex plus 0.5ex minus 0.5ex}\listoffigures}
+%{\setlength{\parskip}{0ex plus 0.5ex minus 0.5ex}\listoftables}
+{\setlength{\parskip}{0ex plus 0.5ex minus 0.5ex}\listofalgocfs}
+
+\chapter*{List of Acronyms}
+\begin{multicols}{2}
+\begin{acronym}
+ \acro{CA}{Cluster Autoscaler}
+ \acro{HPA}{Horizontal Pod Autoscaler}
+ \acro{VPA}{Vertical Pod Autoscaler}
+ \acro{K8S}{Kubernetes}
+ \acro{CR}{Custom Resource}
+ \acro{CRD}{CustomResourceDefinition}
+ \acro{PVC}{PersistentVolumeClaim}
+ \acro{PV}{PersistentVolume}
+ \acro{PDB}{PodDisruptionBudget}
+ \acro{LVM}{Logical Volume Manager}
+ \acro{VG}{Volume Group}
+ \acro{LV}{Logical Volume}
+\end{acronym}
+\end{multicols}
+
+\selectlanguage{english}
+\listoffigures
+
+\mainmatter
+\settocdepth{subsubsection}
+
+\selectlanguage{greek} % forces language specific hyphenation
+\input{./chapters/gr/01-intro}
+\input{./chapters/gr/02-background}
+\input{./chapters/gr/03-design}
+\input{./chapters/gr/04-implementation}
+\input{./chapters/gr/06-conclusion}
+
+\setcounter{chapter}{0}
+
+\selectlanguage{english}
+\input{./chapters/en/01-intro}
+\input{./chapters/en/02-background}
+\input{./chapters/en/03-design}
+\input{./chapters/en/04-implementation}
+\input{./chapters/en/06-conclusion}
+
+\backmatter
+
+% https://tex.stackexchange.com/questions/17653/how-to-list-all-bibliography-entries-without-citing
+\nocite{*}
+\input{./back_chapters/ch_01_bibliography}
+
+\appendix
+
+%\input{./back_chapters/ch_02_publications}
+\end{document}

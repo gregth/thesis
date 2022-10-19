@@ -1,0 +1,224 @@
+\chapter{\introname} \label{chapter:introduction}
+
+% See https://github.com/arrikto/prv-diplom/issues/8 for the rationale behind
+% these chapters. We follow the structure proposed in
+% https://cs.stanford.edu/people/widom/paper-writing.html.
+
+In this first chapter, we outline the scope of our work. We provide a brief
+overview of the task at hand, and we illustrate the gap that there is to fill.
+Then, we review the existing approaches, highlighting their offerings and
+drawbacks. Moving on, we give a high-level overview of the mechanism we built.
+Finally, we present the structure of this thesis
+
+
+\section{Motivation} \label{section:intro_motivation}
+
+
+Kubernetes is the de-facto container orchestrator choice for every company going
+cloud-native. The popularity of Kubernetes arises from the fact that it makes
+application lifecycle management for container-based applications a lot easier
+for DevOps via a declarative desired state-based management approach. It exposes
+a powerful declarative API that developers can use to describe the desired state
+of an application in terms of Pods, Services, etc. Kubernetes controllers take
+immediate actions to bring the observed state of the system to the desired
+state. Kubernetes can run on-premises and on most major cloud providers such as
+Amazon Web Services (AWS), Google Cloud, and Microsoft Azure, which is also key
+to its success.
+
+By packaging code and dependency into containers, the development teams can use
+standard code units that start and terminate quickly to allow applications to
+scale to any size. They can use containers to package entire applications and
+move them to the cloud without needing to undergo code changes. Kubernetes act
+as an orchestrator platform to let large numbers of containers work harmoniously
+together and reduce operational burdens.
+
+The Kubernetes Scheduler and Cluster Autoscaler (Autoscaler) work together to
+ensure the cluster's workload is running. The Scheduler ensures that the
+workload units (Pods) are assigned to cluster nodes with sufficient resources,
+i.e., memory, CPU, and storage. At the same time, the Cluster Autoscaler
+maintains an appropriate number of nodes in the cluster that allows the workload
+to run seamlessly without wasting any excess resources. The latter implies that
+the Cluster Autoscaler is a component that enables enterprises to optimize costs
+by dynamically scaling the number of nodes in the cluster in response to the
+current cluster workload and, thus, meet dynamic demand. Without the Cluster
+Autoscaler, the enterprises are bound to use a fixed-size cluster, which leads
+to either being charged for unneeded resources in the cluster, or the necessary
+resources would not be enough for the workload to run.
+
+Combining Kubernetes with local persistent volumes allows users to access the
+local storage of a node in the cluster through the standard Kubernetes
+\texttt{PersistentVolumeClaim} interface in a simple and portable way. The
+primary benefit of local persistent volumes over remote persistent storage
+(e.g., network-attached volumes) is performance: local disks usually offer
+higher IOPS, higher throughput, and lower latency than remote storage systems.
+For instance, by attaching non-volatile memory express (NVMe) disks to a node,
+the end-user can benefit from a huge performance boost when executing
+applications that demand heavy storage utilization. For instance, in the case of
+enterprises, local storage can enable them to optimize the speed that they run
+the disk-intensive workload, such as machine learning, big data analysis tasks,
+etc., which is a crucial factor for revenue.
+
+Enabling the seamless operation of the Cluster Autoscaler on Kubernetes clusters
+that leverage local storage is of high importance for enterprises. Local storage
+will enable them to run disk-intensive workload efficiently and fast, the
+Cluster Autoscaler will maintain the appropriate size of the cluster and the
+Autoscaler will ensure that workload runs on the right kind of node. This triple
+combination works towards infrastructure cost reduction, which is highly
+important for enterprises.
+
+
+However, working with local persistent storage has a few implications that
+Kubernetes has not yet resolved:
+\begin{itemize}
+      \tightlist
+      \item The Scheduler does not consider the available local storage when
+            scheduling the workload units.
+      \item The Cluster Autoscaler does not scale down (remove nodes) the
+            cluster if local volumes are provisioned on the nodes since the removal
+            would lead to data loss.
+      \item The Cluster Autoscaler does not scale up the cluster (add nodes)
+            when the nodes do not have enough local storage for the workload requests.
+\end{itemize}
+
+Motivated by the significance and the impact of using local persistent storage
+on Kubernetes clusters, in this thesis, we propose extensions for the Kubernetes
+Scheduler and the Cluster Autoscaler to enable seamless operation with local
+storage. More specifically, our work is two-fold:
+
+\begin{itemize}
+      \item We propose a extensions so that the Cluster Autoscaler can scale
+            down and up clusters with local persistent storage.
+      \item We propose extensions for the Scheduler to schedule the workload on
+            nodes with the required amount of local storage available.
+\end{itemize}
+
+
+\section{Problem Statement} \label{section:intro_problem_statement}
+
+As stated in section \ref{section:intro_motivation}, this thesis is motivated by
+local persistent storage's benefits. However, the integration of the Kubernetes
+Scheduler and the Cluster Autoscaler with local storage has a few implications
+that are not yet resolved:
+\begin{itemize}
+      \tightlist
+      \item The Scheduler does not schedule the workload considering the
+            available storage. Without considering the available storage, it may
+            schedule a Pod onto an unsuitable node where the storage driver
+            cannot provide the requested volumes because the underlying storage
+            system does not have sufficient capacity.
+      \item The Cluster Autoscaler does not scale down clusters with local
+            persistent storage since the local data reside on each node, and
+            removing the node would lead to losing access to these data.
+      \item The Cluster Autoscaler does not scale up clusters, i.e., it does not
+            add nodes in the cluster when there is not enough local storage for
+            the workload to run.
+\end{itemize}
+
+In this thesis, we make design proposals and implement them to overcome these
+problems and enable the seamless operation of the Kubernetes Scheduler and the
+Cluster Autoscaler with local persistent storage.
+
+%\section{Current Challenges} \label{section:intro-challenges}
+
+\section{Existing Solutions} \label{section:intro-existing}
+
+Currently, the Cluster Autoscaler does not support autoscaling for cluster nodes
+that use local persistent storage. Each volume that is leveraging local storage
+will be considered by the Autoscaler to be only accessible by that node, and,
+thus, it will not remove the node where the data live; in other words, scaling
+down with local volumes is infeasible. Moreover, there is no option to scale up
+when there is not enough local storage for the workload that requests it. There
+are no existing solutions to fix these problems.
+
+Regarding the Kubernetes Scheduler, the Kubernetes community has currently
+implemented preliminary support for scheduling with storage consideration. They
+call the feature ``Storage Capacity Tracking''. Scheduling a Pod with Capacity
+storage capacity tracking allows the storage (CSI) drivers to publish
+information about the remaining capacity on each topology segment of the
+cluster. The Scheduler then uses that information to pick a suitable node for a
+Pod that requests volumes to be provisioned. However, the current approach comes
+with a few limitations:
+
+\begin{itemize}
+      \item It does not attempt to model how scheduling decisions affect storage
+            capacity. The Kubernetes SIG Storage team took this design decision
+            to ease the development of the feature, since the effect can vary
+            considerably depending on how the storage system handles storage. As
+            a consequence of this decision, a Pod requesting multiple volumes to
+            be provisioned might get scheduled on a node where there is only
+            enough space for each of the volumes individually, without
+            considering the total amount of storage needed to accommodate all
+            the volumes. As a consequence, the scheduling of a Pod can fail
+            permanently: one volume might get created successfully in a topology
+            segment that does not have enough capacity left for the other
+            volume. Then, the already provisioned volume will restrict future
+            attempts to schedule the Pod. Manual intervention is necessary to
+            recover from this state, for example, by increasing capacity or
+            deleting the already created volume.
+      \item The feature is only available on clusters running Kubernetes version
+            1.21 or later. Running Kubernetes 1.21 or later is a requirement
+            that not all production clusters currently meet. In our case, a few
+            enterprises are still using older versions of Kubernetes; thus, the
+            Capacity Tracking feature not available.
+\end{itemize}
+
+As it comes for the Cluster Autoscaler, there are no reported solutions to
+overcome its current limitations.
+
+\section{Proposed Solution} \label{section:intro_proposed_solution}
+
+As already explained in previous sections, this thesis aims to enable seamless
+autoscaling and scheduling on clusters that leverage local persistent storage.
+Our proposed design involves the extension of various components, namely, the
+Scheduler, the Cluster Autoscaler, and the controller of the local storage
+driver (CSI driver).
+
+In a nutshell, we propose the following design:
+
+\begin{itemize}
+      \item Extend the Rok CSI storage driver to report the available storage
+            capacity on each cluster node on the Kubernetes \texttt{Node}
+            objects. The driver will calculate the available storage by issuing
+            commands to the underlying Local Volume Manager.
+      \item Extend the Kubernetes Scheduler to consider the reported storage
+            capacity of each node when scheduling a Pod that requests Rok's
+            local volumes to be provisioned. We call the extended scheduler
+            ``Rok Scheduler''.
+      \item Integrate the Cluster Autoscaler with the Rok CSI mechanism to
+            snapshot and protect local volumes when a node is removed, enabling
+            the cluster's seamless scale-down.
+      \item Extend the Kubernetes Cluster Autoscaler to consider the storage
+            utilization when deciding whether to scale down a node and check if
+            there is enough storage on other nodes to accommodate the Pods of
+            the node.
+      \item Extend the Kubernetes Cluster Autoscaler to scale up the cluster
+            when there is insufficient storage.
+      \item Extend the Kubernetes Cluster Autoscaler not to remove nodes of a
+            cluster that are in the Unready state since the local volumes still
+            live on the Unready nodes, and the removal of the node will lead to
+            data loss.
+
+\end{itemize}
+
+In the context of this thesis, we use the ``Rok'' data management system by
+Arrikto, which integrates with Kubernetes using the Container Storage Interface
+(see section \ref{section:background-csi}) and exposes the local storage of a
+node as volumes for the workload to consume.  Although the design implementation
+focuses on Rok, it can be easily generalized to any other local storage systems.
+
+\section{Outline}
+\label{section:intro_outline}
+
+The rest of this thesis is organized as follows:
+
+\begin{itemize}
+      \item In \textbf{chapter 2} we provide the theoretical background
+            necessary for the reader to understand our work.
+      \item In \textbf{chapter 3} we analyze the design of the Scheduler and the
+            Cluster Autoscaler, expose parts of their mechanism and propose
+            design changes for enabling their seamless operation when local
+            persistent storage is involved.
+      \item In \textbf{chapter 4} we analyze the implementation of our design.
+      \item In \textbf{chapter 5} we provide a summary of our contributions and
+            possible future work directions.
+\end{itemize}

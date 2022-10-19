@@ -1,0 +1,30 @@
+\begin{algorithm}[h]
+      \caption{The scheduler's VolumeBinding plugin: PreBind() method}
+      \label{alg:vol-binding-prebind}
+      \KwIn{\co{pod}: the Pod to be scheduled \\ \co{claimsToBind}: PVCs to bind
+            \\ \co{claimsToProvision}: PVCs to provision \\ \co{node}: the
+            selected node} \KwResult{Binds unbound PVCs of the Pod with PVs.}
+      \begin{enumerate}[leftmargin=0.5cm]
+            \tightlist
+            \item Initiate the binding of \co{claimsToBind} by updating the API
+                  Server with the binding of the PV to its matching PVC.
+            \item Trigger the provisioning of \co{claimsToProvision} by updating
+                  the API Server object of each PVC with the selected node
+                  annotation.
+            \item Wait for PVCs to be completely bound by the PV controller:
+                  \begin{enumerate}[]
+                        \tightlist
+                        \item For each claim in \co{claimsToProvision}:
+                              \begin{enumerate}
+                                    \item Check its selected node annotation.
+                                    \item \lIf{the annotation was
+                                                removed}{cancel the scheduling attempt}
+                              \end{enumerate}
+
+                        \item For each claim in \co{claimsToProvision}, check if
+                              the bidirectional binding of the claim to the
+                              corresponding PV has completed.
+                        \item \lIf{the operation times out}{return error}
+                  \end{enumerate}
+      \end{enumerate}
+\end{algorithm}

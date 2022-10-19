@@ -1,0 +1,39 @@
+\begin{algorithm}[ht]
+\caption{Cluster Autoscaler: TryToScaleDown() method}\label{algorithm:try-scale-down}
+    \KwIn{A list of unneeded nodes, as computed by UpdateUnneded() method}
+    \KwResult{Scales-down the cluster}
+\begin{enumerate}[leftmargin=0.5cm]
+\item
+  For each node in the unneeded nodes:
+
+  \begin{enumerate}[leftmargin=0.5cm]
+  \tightlist
+  \item \lIf{If the node has the \texttt{cluster-autoscaler.kubernetes.io/scale-down-disabled}}{mark the node unremovable, reason \co{ScaleDownDisabledAnnotation}, go to next node.}
+    \item
+    \lIf{the node is \texttt{Ready}, and it has been underutilized for
+    less than \texttt{ScaleDownUnneededTime}}{mark the node unremovable,
+    reason \texttt{NotUnneededLongEnough}, continue to next node}
+  \item
+    \lIf{the node is \texttt{Unready}, and it has been underutilized for
+    less than \texttt{ScaleDownUnreadyTime}}{mark the node unremovable,
+    reason \texttt{NotUnreadyLongEnough}, continue to next node}
+  \item
+    Get the NodeGroup the node belongs to, get its \co{minSize} and current
+    \co{size}, the number of node deletions in progress for the node group
+    (\texttt{deletionsInProgress}).
+  \item \lIf{\co{size} - \co{deletionsInProgress} $\leq$ \co{minSize}}{
+    mark the node unremovable, reason \texttt{NodeGroupMinSizeReached},
+    continue to next node}
+  \end{enumerate}
+  \item
+  \co{candidates} \lar All the unneeded node that were not marked unremovable
+  \item
+    From \co{candidates}, try to scale-down as many as possible empty nodes.
+  \item
+    \texttt{nodesToRemove} \lar From the remaining candidates find nodes to
+    remove (call \texttt{FindNodesToRemove()}).
+  \item
+    Pick a node from \texttt{nodesToRemove} and delete it
+    (call \texttt{deleteNode()}) .
+\end{enumerate}
+\end{algorithm}

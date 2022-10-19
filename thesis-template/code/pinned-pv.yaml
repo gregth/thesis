@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: rok.arrikto.com
+  creationTimestamp: "2022-05-24T14:46:01Z"
+  finalizers:
+  - kubernetes.io/pv-protection
+  - external-attacher/rok-arrikto-com
+  name: pvc-c4c7575b-7128-444d-ac17-7209f0ddc6ae
+  ...
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node
+          operator: In
+          values:
+          - ip-172-31-39-125.eu-central-1.compute.internal
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: pvc-ro
+    namespace: tests
+    ...
+  csi:
+    driver: rok.arrikto.com
+    ...
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: rok
+  volumeMode: Filesystem
+status:
+  phase: Bound

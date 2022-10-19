@@ -1,0 +1,42 @@
+
+\begin{algorithm}[H]
+    \caption{Cluster Autoscaler: GetNodeInfoForGroup() method}\label{alg:template}
+    \KwIn{node group: A NodeGroup struct.}
+    \KwOut{A template node for the Node Group (NodeInfo struct).}
+    \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item \If{a ready and schedulable node of the node group exists
+                  in the cluster}{
+                  \begin{enumerate}
+                      \tightlist
+                      \item Build the template from that node.
+                      \item Store the template in the template's cache.
+                      \item Return the template.
+                  \end{enumerate}
+              }
+        \item \If{a template node for the node group exists in the Autoscaler's cache}{
+                  \begin{enumerate}
+                      \tightlist
+                      \item Return the cached template node.
+                  \end{enumerate}
+              }
+        \item Call \co{TemplateNodeInfo()} of the \co{NodeGroup} interface to
+              get the cloud provider defined template for the node group.
+        \item \If{the \co{TemplateNodeInfo()} generated the template successfully}{
+                  \begin{enumerate}
+                      \tightlist
+                      \item Return the template.
+                  \end{enumerate}
+              }
+        \item \If{an unready or unschedulable node of the node group exists
+                  in the cluster}{
+                  \begin{enumerate}
+                      \tightlist
+                      \item Build the template from that node.
+                      \item Return the template.
+                  \end{enumerate}
+              }
+        \item
+              Return error, the template node could not be constructed.
+    \end{enumerate}
+\end{algorithm}

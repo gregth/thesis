@@ -1,0 +1,32 @@
+\begin{algorithm}[H]
+    \caption{Cluster Autoscaler: Scale-down evaluation procedure}\label{alg:scale-down-evaluation}
+    \SetKwIF{If}{ElseIf}{Else}{if~\endgraf}{\endgraf then}{else if}{else}{end if}%
+    %\begin{minipage}{\textwidth}
+    \begin{enumerate}[leftmargin=0cm]
+        \tightlist
+        \item Take a snapshot of the cluster Nodes, Pods, and PodDisruptionBudgets.
+        \item \texttt{allNodes} \(\leftarrow\) List all the \co{Node} objects from the API Server.
+        \item \texttt{scaleDownCandidates} \(\leftarrow\) Select nodes from
+              \texttt{AllNodes} that belong to node groups that have not reached their
+              minimum size.
+        \item \texttt{podDestinations} \(\leftarrow\) \texttt{AllNodes};
+              \texttt{podDestinations} represents the nodes that that may accept Pods in case a node is removed.
+        \item Call \texttt{UpdateUnneededNodes()} with \texttt{podDestinations},
+              and \texttt{scaleDownCandidates} as input, to calculate which nodes are
+              unneeded an which ones are unremovable.
+        \item \uIf{\begin{tabular}{@{\hspace*{1.0em}}l@{}}
+                      the scale-down has been disabled for this loop                                           \\
+                      % TODO: times in table
+                      \textbf{OR} \co{scaleDownDelayAfterDelete} interval has not elapsed  \\
+                      \textbf{OR} \co{scaleDownDelayAfterAdd} interval has not elapsed  \\
+                      \textbf{OR} \co{scaleDownDelayAfterFailure} interval has not elapsed 
+                  \end{tabular}}{
+                  Don't scale-down the cluster. Autoscaler Status: \texttt{ScaleDownInCooldown}
+              }
+              \uElseIf{there is non empty node deletion in progress} {
+                  Don't scale-down the cluster. Autoscaler Status: \texttt{ScaleDownInProgress}}
+              \lElse{Try to scale down the cluster.}
+    \end{enumerate}
+    %\end{minipage}
+\end{algorithm}
+

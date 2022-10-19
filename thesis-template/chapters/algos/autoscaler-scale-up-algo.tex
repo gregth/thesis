@@ -1,0 +1,59 @@
+\begin{algorithm}[ht]
+    \caption{Cluster Autoscaler: ScaleUp() method}\label{alg:cap}
+    \label{algorithm:scale-up} \KwIn{\co{pods}: the unschedulable Pods
+        \\\co{snapshot}: the cluster snapshot } \KwResult{Adds extra nodes to
+        accommodate the unschedulable Pods}
+    \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item Build Pod equivalence groups - each Pod equivalence group consists
+              of Pods that are managed by the same controller (same UUID) and have
+              the same spec and labels.
+        \item For each node group registered:
+              \begin{enumerate}
+                  \tightlist
+                  \item Get its target size.
+                  \item If the target size $\geq$ max size, go to the next node
+                        group.
+                  \item Create a template node for the node group.
+                  \item Compute the expansion option for the node group, see
+                        \co{ComputeExpansionsOption()}.
+                  \item If any unschedulable Pod can be helped by adding a new
+                        node of the node group, add the node group in the expansion
+                        options list.
+              \end{enumerate}
+        \item If there are not any expansion options list, then do not trigger
+              any scale-ups.
+        \item Else, from the expansions options select one, according to the
+              configured expansion strategy.
+        \item Execute the selected scale up option: increase the target sizes of
+              the corresponding node groups.
+    \end{enumerate}
+\end{algorithm}
+
+\begin{algorithm}[ht]
+    \caption{Cluster Autoscaler: ComputeExpansionsOption()
+        algorithm}\label{algorithm:scaleup-options} \KwIn{\co{pods}: the unschedulable
+        Pods \\\co{snapshot}: the cluster snapshot \\\co{template}: the template
+        node of the node group} \KwResult{Computes if the scale-up of the node group
+        would help any of the unschedulable Pods.}
+    \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item
+              For each Pod equivalence group:
+              \begin{enumerate}
+                  \tightlist
+                  \item Get the sample Pod of the Pod equivalence group.
+                  \item Add the template node in the cluster snapshot.
+                  \item Call the Predicate Checker to check if any of the
+                        unschedulable Pods can be scheduled in the new cluster snapshot.
+                  \item If the sample Pod fits the new node in the cluster
+                        simulation, append all the equivalent Pods in the list of Pods
+                        that got helped (\co{options.Pods}).
+              \end{enumerate}
+        \item Call the bin-packing estimator to estimate how many nodes of
+              the node group would be needed to help all the equivalent Pods.
+        \item Return the \co{option}: a struct that indicates how many nodes of
+              the node group are needed and which Pods would be helped.
+    \end{enumerate}
+\end{algorithm}
+

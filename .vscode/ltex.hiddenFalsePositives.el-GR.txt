@@ -1,0 +1,3 @@
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QΗ στοιχειοθεσία του κειμένου έγινε με το .\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qστους γονείς μου Κανέλλα & Παναγιώτη, στα αδέλφια μου Γιώργο, Κωνσταντίνο, Πηνελόπη, στα παιδιά που ονειρεύονται\\E$"}
+{"rule":"MORFOLOGIK_RULE_EL_GR","sentence":"^\\QΧρησιμοποιήθηκαν οι γραμματοσειρές Minion Pro, Myriad Pro και Consolas.\\E$"}

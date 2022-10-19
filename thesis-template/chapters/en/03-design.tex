@@ -1,0 +1,33 @@
+\chapter{Design} \label{chapter:design}
+
+In this chapter, we describe the design and algorithms that discipline the
+operation of the Cluster Autoscaler and the Scheduler; we point out their
+shortcomings concerning local data storage and propose design enhancements to
+enable seamless scheduling and autoscaling with local persistent volumes.
+
+\section{Design Rationale \& Goals}
+
+As explained in section \ref{section:intro_problem_statement}, our goal is to
+extend the Scheduler and the Cluster Autoscaler so that they operate seamlessly
+with workloads that use volumes backed by local storage. More specifically, we
+aim to:
+
+\begin{itemize}
+      \tightlist
+      \item Extend the Scheduler to consider the storage capacity of the nodes
+            when scheduling Pods.
+      \item Extend the Autoscaler to scale-down nodes where local volumes live,
+            ensuring that Rok's mechanism snapshots the data before removing the
+            node from the cluster.
+      \item Extend the Autoscaler to check if the Pod's volumes can be placed on
+            any other node (with regards to storage capacity) when evaluating (for
+            a possible scale-down) if a Pod can be moved elsewhere.
+      \item Extend the Autoscaler to consider the storage capacity of nodes, and,
+            when scaling up, add a node with enough storage capacity.
+      \item Extend the Autoscaler to not remove unready nodes in case local
+            volumes live on these nodes.
+\end{itemize}
+
+\input{chapters/en/design/rok.tex}
+\input{chapters/en/design/scheduler.tex}
+\input{chapters/en/design/autoscaler.tex}

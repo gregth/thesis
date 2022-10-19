@@ -1,0 +1,32 @@
+\begin{algorithm}[H]
+\SetEndCharOfAlgoLine{.}
+\caption{Cluster Autoscaler: CalculateUtilization() method}\label{alg:utilization}
+    \KwIn{\co{node}: A Node API object
+    \\ \co{pods}: the Pods running on the node
+    \\ \co{resource}: a specific resource type, e.g, cpu, memory, etc
+    }
+    \KwOut{The utilization of node for a given resource}
+    \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item  Get the node allocatable resource from the \co{Node} object:\\ \texttt{nodeAllocatable} \(\leftarrow\) \texttt{node.Status.Allocatable[resource]}.
+        \item \lIf{nodeAllocatable == 0}{\Return 0}
+        \item Initialize: \texttt{daemonSetRequests} \lar 0, \texttt{podRequest \lar 0}.
+        \item Calculate the Pods' total resource requests. For each \co{pod} in \co{pods}: 
+            \begin{enumerate}
+            \tightlist
+            \item \texttt{request} \lar  Calculate the resource request of the Pod by summing the
+                \texttt{container.Resources.Requests{[}resourceName{]}} of each container of the
+                \co{pod}.
+            \item \lIf{Autoscaler is configured to ignore DaemonSet
+                Pods in node utilization AND the Pod is a
+                DaemonSet Pod}{
+                \texttt{daemonSetRequests+= request}}
+            \item \lIf {the Pod is long terminating}{continue to next Pod}
+            \item \texttt{podRequest += request}.
+            \end{enumerate}
+    \item Calculate the utilization: \[ utilization =  \frac{podRequest - daemonSetRequests}{ nodeAllocatable - daemonSetRequests} \]
+    \item \Return{utilization} 
+
+    \end{enumerate}
+\end{algorithm}
+% TODO: Mirror long terminating 

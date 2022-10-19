@@ -1,0 +1,25 @@
+\begin{algorithm}[h]
+      \caption{The scheduler's VolumeBinding Plugin: hasEnough() method}
+      \label{alg:vol-binding-has-enough}
+      \KwIn{\texttt{claim}: the PVC to check
+            \\ \co{node}: the \co{Node} to examine
+      }
+      \KwResult{Checks if there is enough capacity for PVC on the node.}
+      \begin{enumerate}[leftmargin=0.5cm]
+            \tightlist
+            \item request \lar Storage size (in bytes) the PVC requests.
+            \item Get the name of the provisioner from \co{StorageClass} the PVC requests.
+            \item Get the \co{CSIDriver} object with the same name as the provisioner.
+            \item \lIf{no such \co{CSIDriver} object exists}{return true (capacity tracking is not enabled)}
+            \item \co{capacities} \lar List all the \co{CSIStorageCapacity} objects from the API Server.
+            \item For each \co{capacity} in \co{capacities}:
+                  \begin{enumerate}
+                        \item \lIf{capacity.StorageClassName != storageClass.Name}{go to the next \co{capacity}}
+                        \item \lIf{request $>$ capacity.Capacity}{go to next \co{capacity}}
+                        \item Check if node has access to the specific topology, by checking the \co{capacity.NodeTopology} against the node's labels.
+                        \item \lIf{node does not have access to the topology}{go to next \co{capacity}}
+                        \item Return \co{true} (the node has access to enough capacity for the volume to be provisioned).
+                  \end{enumerate}
+            \item Return \co{false}, no CSIStorageCapacity with enough capacity for the PVC accessible from the node was found.
+      \end{enumerate}
+\end{algorithm}

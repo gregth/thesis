@@ -1,0 +1,29 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: rok-scheduler-webhook
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: ""
+    service:
+      name: rok-scheduler-webhook
+      namespace: rok-system
+      path: /mutate
+  failurePolicy: Fail
+  name: kubeflow.rok-scheduler-webhook.arrikto.com
+  namespaceSelector:
+    matchLabels:
+      control-plane: kubeflow
+  reinvocationPolicy: IfNeeded
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+  sideEffects: None

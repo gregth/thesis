@@ -1,0 +1,79 @@
+{
+    "cSpell.words": [
+        "Autoscaler",
+        "microservices",
+        "χρονοδρομολογείται"
+    ],
+    "cSpell.language": "en,el",
+    // Specify the root file
+    "latex-workshop.latex.search.rootFiles.include" :[
+        "thesis.tex",
+    ],
+
+    //"latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.recipe.default": "docker-exec-xelatex",
+    "latex-workshop.latex.tools": [{
+        // Build using the provided makefile.
+        "name": "xelatexmk",
+        "command": "make",
+    },
+    {
+        "name": "docker-build",
+        "command": "docker",
+        // "args": ["exec",  "-t", "/thesis-box", "bash -c 'cd /diplom/thesis-template; make'"]
+        // "args": ["exec",  "-t", "/thesis-box", "ls; bash -c 'ls -l'"]
+        "args": ["exec",  "-t", "/thesis-box", "bash", "-c", "cd /diplom/thesis-template; make"]
+    }],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "make-xelatex",
+            "tools": [
+                "xelatexmk"
+            ]
+        },
+        {
+            "name": "docker-exec-xelatex",
+            "tools": [
+                "docker-build"
+            ]
+        }
+    ],
+    // Enable synctex
+    "latex-workshop.synctex.synctexjs.enabled": true,
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "cSpell.ignoreWords": [
+        "Autoscaler"
+    ],
+"cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+        "name": "custom-dictionary-workspace",
+        "path": "${workspaceFolder:diplom}/.cspell/custom-dictionary-workspace.txt",
+        "addWords": true,
+        "scope": "workspace"
+    }
+},
+//"latex-workshop.view.pdf.viewer": "external",
+"latex-workshop.view.pdf.external.viewer.command": "evince2",
+"latex-workshop.view.pdf.external.viewer.args": [
+    "%PDF%"
+],
+"latex-workshop.view.pdf.external.synctex.command": "evince_forward_search",
+"latex-workshop.view.pdf.external.synctex.args": [
+    "%PDF%",
+    "%LINE%",
+    "%TEX%"
+],
+"latex-workshop.message.latexlog.exclude": [
+    ".*Font shape.*",
+    "Overfull",
+    "Underfull"
+],
+"latex-workshop.view.pdf.viewer": "external",
+"editor.minimap.enabled": false,
+"grammarly.selectors": [
+    {
+        "language": "latex",
+        "scheme": "file"
+    }
+]
+}

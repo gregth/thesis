@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rok-scheduler-webhook
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: rok
+  name: rok-scheduler-webhook
+  namespace: rok-system
+spec:
+  ports:
+  - name: https-server
+    port: 443
+    targetPort: https-server
+  selector:
+    app: rok-scheduler-webhook
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: rok
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rok-scheduler-webhook
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: rok
+  name: rok-scheduler-webhook
+  namespace: rok-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rok-scheduler-webhook
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/part-of: rok
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: rok-scheduler-webhook
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/part-of: rok
+    spec:
+      containers:
+      - args:
+        - --port=8443
+        - --tls-dir=/etc/webhook/certs
+        - --cert-name=tls.crt
+        - --key-name=tls.key
+        - --annotation-optout=arrikto.com/skip-rok-scheduler-webhook
+        - --scheduler-name=rok-scheduler
+        image: gcr.io/arrikto-deploy/rok-scheduler-webhook:release-1.5-l0-release-1.5-rc3-44-g043036e6c
+        imagePullPolicy: IfNotPresent
+        name: rok-scheduler-webhook
+        ports:
+        - containerPort: 8443
+          name: https-server
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /etc/webhook/certs
+          name: webhook-certs
+          readOnly: true
+      imagePullSecrets:
+      - name: rok-scheduler-webhook-reg-secret
+      priorityClassName: system-cluster-critical
+      volumes:
+      - name: webhook-certs
+        secret:
+          secretName: rok-scheduler-webhook-certs
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rok-scheduler-webhook-cert
+  namespace: rok-system
+spec:
+  commonName: rok-scheduler-webhook.rok-system.svc
+  dnsNames:
+  - rok-scheduler-webhook.rok-system.svc
+  - rok-scheduler-webhook.rok-system.svc.cluster.local
+  isCA: true
+  issuerRef:
+    kind: ClusterIssuer
+    name: arrikto-self-signing-issuer
+  secretName: rok-scheduler-webhook-certs

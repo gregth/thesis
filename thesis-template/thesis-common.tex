@@ -1,0 +1,29 @@
+%
+% Some useful LaTeX stuff
+%
+
+% Hyphenation patterns
+\hyphenation{Kubeflow}      \hyphenation{Rok}
+\hyphenation{Kale}          \hyphenation{Arrikto}       \hyphenation{MLOps}
+\hyphenation{Bin-Pack-ing-No-de-E-sti-ma-tor}
+
+% Avoid one-letter hyphenation fragments
+\lefthyphenmin=3 \righthyphenmin=3
+
+% A few aliases
+\newcommand{\vw}[1]{\texttt{#1}}				% verbatim word, e.g., function names  [monospaced]
+\newcommand{\vbw}[1]{\textbf{\texttt{#1}}}		% verbatim word, e.g., function names  [bold + monospaced]
+\newcommand{\vbfw}[1]{\vbw{\footnotesize{#1}}}  % verbatim word, e.g., function names  [bold + monospaced]
+\newcommand{\bw}[1]{\textbf{#1}}				% bold word
+\newcommand{\ind}[1]{\index{#1}{#1}}			% insert a word into the index 
+\newcommand{\eind}[1]{\index{#1}\textit{#1}}	% insert a word into the index [typeset it emphasized, in italics]
+\newcommand{\rar}{$\longrightarrow$}
+
+% Special characters
+\newcommand{\gl}{«}     % left greek quotation mark [UTF-8]
+\newcommand{\gr}{»}     % right greek quotation mark [UTF-8]
+\newcommand{\sql}{‘}    % left  single quotation mark
+\newcommand{\sqr}{’}    % right single quotation mark
+\newcommand{\ql}{“}     % left  double quotation mark
+\newcommand{\qr}{”}     % right double quotation mark
+\newcommand{\ud}{·}     % greek upper dot

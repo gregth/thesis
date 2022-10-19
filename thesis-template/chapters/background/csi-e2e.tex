@@ -1,0 +1,40 @@
+\subsection{Kubernetes CSI: An End-to-End Story}
+
+In this section, we aim to combine all the information by describing an
+end-to-end story for the CSI.  We present the timeline of actions that take
+place under the hood in order to provision a  volume dynamically.
+
+The timeline of actions is the following:
+
+\begin{enumerate}
+	\tightlist
+	\item The cluster administrator creates a StorageClass (in our case, the
+	      \co{Rok} storage class) that specifies the CSI plug-in name
+	      (\co{provisioner:rok.arrikto.com}):
+	      \lstinputlisting[language=yaml]{code/rok-sc.yaml}
+
+	\item A user creates a PersistentVolumeClaim that requests a volume of at
+	      least 10 Gi with access mode \co{ReadWriteOnce} from the \co{Rok}
+	      storage class.
+
+	      \lstinputlisting[language=yaml]{code/pvc-rok.yaml}
+
+	      Since the \co{Rok} StorageClass has \co{volumeBindingMode:
+		      WaitForFirstConsumer}, the volume for the PVC will not be
+	      provisioned as long as a Pod requesting the PVC is not scheduled
+	      on a node. he PVC to be provisioned.
+	\item  A user creates a Pod that uses the PVC:
+	      \lstinputlisting[language=yaml]{code/pod-pvc-rok.yaml}
+	\item The VolumeBinding plugin of the scheduler does not find any PV to
+	      match the PVC. It signals the driver to provision the volume
+	      dynamically: it annotates the PVC with the selected node annotation..
+	\item The external provisioner sidecar that runs along with the Rok CSI
+	      driver sees the annotation on the PVC and issues a \co{CreateVolume}
+	      call against the Rok CSI Controller service to provision the volume.
+	\item The Rok CSI controller provisions the volume and returns a successful
+	      response to the external provisioner.
+	\item The external provisioner creates a \co{PersistentVolume} object on the API
+	      Server and binds it (the PV) to the  PVC.
+	\item The PersistentVolume controller completes the bidirectional binding of
+	      the PV and the PVC (by binding the PVC to the PV).
+\end{enumerate}

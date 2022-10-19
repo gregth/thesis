@@ -1,0 +1,21 @@
+\begin{algorithm}[H]
+\caption{Cluster Autoscaler: sanitizeNodeInfo() method}\label{alg:sanitize-template}
+\KwIn{\co{node}: A template node (\co{NodeInfo} struct)}
+\KwOut{A sanitized template node (\co{NodeInfo} struct).}
+\begin{enumerate}
+    \tightlist
+    \item \co{nodeName} \lar \co{``template-node-for-<nodegroup-name>-<random-suf>''}.
+    \item Set the \co{kubernetes.io/hostname} label of the node to \co{nodeName}
+    \item Remove the following taints of the node:
+      \begin{itemize}
+        \tightlist
+        \item \co{ToBeDeletedByClusterAutoscaler}
+        \item \co{DeletionCandidateOfClusterAutoscaler}
+        \item any taints that indicate the node's condition, e.g,
+          \co{node.kubernetes.io/not-ready}
+      \item taints starting with the \co{ignore-taint.cluster-autoscaler.kubernetes.io/} prefix.
+      \end{itemize}
+    \item Remove any taints of the node, as specified by the \co{--ignore-taints} flag of the Cluster Autoscaler.
+    \item Return the sanitized node.
+\end{enumerate}
+\end{algorithm}

@@ -1,0 +1,41 @@
+\begin{algorithm}[h]
+      \caption{The scheduler's VolumeBinding plugin: Filter() method}
+      \label{alg:vol-binding-filter}
+      \KwIn{\texttt{pod}: the Pod to be scheduled
+            \\ \texttt{claimsToBind}: PVCs of the Pod to bind
+            \\ \texttt{boundClaims}: PVCs of the Pod that are bound
+            \\ \co{node}: the \co{Node} to check against.}
+      \KwResult{Checks if the PVCs of the Pod are compatible with the node}
+      \begin{enumerate}[leftmargin=0.5cm]
+            \tightlist
+            \item Call \co{FindPodVolumes(pod, state.boundClaims, state.claimsToBind, node)}
+                  to check if all of the Pod's PVCs can be satisfied by the node:
+                  \begin{enumerate}
+                        \item For each (bound) PVC in \co{boundClaims}:
+                              \begin{enumerate}
+                                    \tightlist
+                                    \item Get the PV it is bound to.
+                                    \item \lIf{the PV's node affinities do not match the node}{the node is not feasible for the Pod}
+                              \end{enumerate}
+                        \item For each (unbound) PVC in \co{claimsToBind}:
+                              \begin{enumerate}
+                                    \tightlist
+                                    \item \lIf{the PVC has the selected node annotation and the selected node is not equal to the name of the examined Node}{return false (pod cannot be scheduled on the node.)}
+                                    \item Try to find a matching PV for the PVC, to bind it to (by calling \co{findMatchingVolumes()}.
+                                    \item \lIf{any matching PV was not found}{add the claim in list of volumes that must be provisioned (by calling \co{claimsToProvision()})}
+                              \end{enumerate}
+                  \end{enumerate}
+            \item Call \co{checkVolumeProvisions(claimsToProvision)}, to check the claims that need provisioning:
+                  \begin{enumerate}
+                        \tightlist
+                        \item For each claim in \co{claimsToProvision} :
+                              \begin{enumerate}
+                                    \tightlist
+                                    \item Get the \co{StorageClass} that the PVC requests.
+                                    \item \lIf{the \co{StorageClass} does not support dynamic provisioning}{return error}
+                                    \item Check if there is enough capacity on the node, by calling \co{hasEnoughCapacity()}.
+                                    \item \lIf{there is not enough capacity}{return error}
+                              \end{enumerate}
+                  \end{enumerate}
+      \end{enumerate}
+\end{algorithm}

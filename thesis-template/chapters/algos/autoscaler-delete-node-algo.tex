@@ -1,0 +1,24 @@
+\begin{algorithm}[ht]
+\caption{Cluster Autoscaler: deleteNode() method}\label{algorithm:node-delete}
+    \KwIn{An unneeded Node of the Cluster to be deleted}
+     \KwResult{Deletes the Node from the cluster and the Cloud Provider}
+        \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item Add \co{ToBeDeletedByClusterAutoscaler:NoSchedule} taint on the
+        Node to make the Node unschedulable.
+        \item Drain the node; For each Pod (except for the DaemonSet Pods), in parallel:
+            \begin{enumerate}
+                \tightlist
+                \item Send Eviction request
+                \item \lWhile{the Eviction fails and for duration up to \co{MaxPodEvictionTimeout}}{retry the Eviction}
+
+                Note: \co{MaxPodEvictionTimeout} is a hard-coded value equal to 2 minutes.
+            \end{enumerate}
+        \item \lIf{any of the Pods was not evicted successfully}{return error}
+        \item \lIf{the node has any annotation with prefix
+        \co{delay-deletion.cluster-autoscaler.kubernetes.io/}}{wait for up to
+        \co{nodeDeletionDelayTimeout} for the annotation to be removed}
+        \item Request from the Cloud Provider to delete the Node.
+        \item \lIf{the Cloud Provider deletion fails}{return error}
+        \end{enumerate}
+\end{algorithm}

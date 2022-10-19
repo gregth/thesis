@@ -1,0 +1,74 @@
+   class CSINodeStorageCapacityThread(threading.Thread):
+    """Report free storage capacity."""
+
+    def run(self):
+        timeout = self.ctx.args.capacity_poll_interval
+        while True:
+            try:
+                capacity, max_instance_capacity = self.get_storage_capacity()
+                self.add_capacity_info(capacity, max_instance_capacity)
+            except Exception as e:
+                log.exception("Failed to update capacity info: %s", str(e))
+
+            try:
+                self.event_queue.get(timeout=timeout)
+            except six.moves.queue.Empty:
+                # Timeout
+                pass
+            else:
+                # Signaled for exit
+                return
+    
+    def add_capacity_info(self, capacity, max_capacity):
+        """Add capacity information on the \co{Node} object.
+
+        - Annotate the node with the currently available capacity
+        - Add a label on the node with the max available capacity
+        """
+        node = self.ctx.args.node_name
+        label_key = "rok.arrikto.com/max-instance-capacity"
+        annotation_key = "rok.arrikto.com/capacity"
+
+        patch = {
+            "metadata": {
+                "annotations": {
+                    annotation_key: str(capacity)
+                },
+                "labels": {
+                    label_key: str(max_capacity)
+                }
+            }
+        }
+
+        n = self.node_client.get(node)
+        annotations = n.metadata.annotations or {}
+        current_capacity = annotations.get(annotation_key, None)
+        if current_capacity:
+            try:
+                current_capacity = int(current_capacity)
+            except ValueError:
+                log.warning("Annotation '%s' on node '%s' is not an integer"
+                            " value: '%s'", annotation_key, node,
+                            current_capacity)
+                current_capacity = None
+
+        labels = n.metadata.labels or {}
+        current_max_capacity = labels.get(label_key, None)
+        if current_max_capacity:
+            try:
+                current_max_capacity = int(current_max_capacity)
+            except ValueError:
+                log.warning("Value of label '%s' on node '%s' is not an"
+                            " integer value: '%s'", label_key, node,
+                            current_max_capacity)
+                current_max_capacity = None
+
+        if (((capacity != current_capacity)
+             or (max_capacity != current_max_capacity))):
+            log.info("Updating capacity information on Node '%s': %s", node,
+                     str(patch))
+            self.node_client.update(node, patch)
+            log.info("Successfully updated capacity information on Node '%s",
+                     node)
+        else:
+            log.info("Capacity information on Node '%s' is up to date", node)

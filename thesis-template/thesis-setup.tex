@@ -1,0 +1,323 @@
+%
+% Setup code & template fields
+%
+
+% Font selection
+\defaultfontfeatures{Scale=MatchLowercase,Mapping=tex-text}
+\setmainfont{MinionPro}[
+   Path=./static/fonts/MinionPro/ ,
+   UprightFont =*-Regular ,
+   BoldFont=*-Semibold ,
+   ItalicFont=*-Italic ,
+   BoldItalicFont=*-SemiboldItalic,
+   Extension = .otf
+ ]
+\setsansfont{MyriadPro}[
+   Path=./static/fonts/MyriadPro/ ,
+   UprightFont =*-Regular ,
+   BoldFont=*-Bold ,
+   ItalicFont=*-Italic ,
+   BoldItalicFont=*-BoldItalic,
+   Extension = .otf
+ ]
+\setmonofont{Consolas}[
+   Path=./static/fonts/Consolas/ ,
+   UprightFont=*-Regular ,
+   BoldFont=*-Bold ,
+   ItalicFont=*-Italic ,
+   BoldItalicFont=*-BoldItalic,
+   Extension = .ttf
+ ]
+
+% No headers on empty pages before new chapter
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+   \hbox{}
+   \thispagestyle{plain}
+   \newpage
+   \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother \clearpage{\pagestyle{plain}\cleardoublepage}
+
+% English intro
+\newcommand\introname{Introduction}
+\newcommand\intro{%
+    \chapter*{\introname
+        \markboth{%
+           \MakeUppercase\introname}{\MakeUppercase\introname}}%
+}
+
+% Greek intro
+\newcommand\grintroname{Εισαγωγή}
+\newcommand\grintro{%
+    \chapter*{\grintroname
+        \markboth{%
+           \MakeUppercase\grintroname}{\MakeUppercase\grintroname}}%
+}
+
+% English abstract
+\newcommand\abstractname{Abstract}
+\newcommand\abstract{%
+    \cleardoublepage
+    \section*{\abstractname
+        \markboth{}{}}%
+}
+
+% Greek abstract
+\newcommand\grabstractname{Περίληψη}
+\newcommand\grabstract{%
+    \cleardoublepage
+    % Intentionally set to sectio in order to save space
+    \section*{\grabstractname%
+        % Don't show any heading
+        \markboth{}{}}%
+}
+
+% Greek foreword
+\newcommand\grforewordname{Αντί Προλόγου}
+\newcommand\grforeword{%
+    \chapter*{\grforewordname
+        \markboth{%
+           \MakeUppercase\grforewordname}{\MakeUppercase\grforewordname}}%
+}
+
+% Template fields
+\ntuaimage{./styles/pyrforos.pdf}
+
+% Greek
+\title{Επεκτάσεις για Χρονοδρομολόγηση \\ και Αυτόματη Κλιμάκωση σε Συστοιχίες Kubernetes \\ με Τοπική Αποθήκευση Δεδομένων}
+\author{Γρηγόριος Π. Θανάσουλας}
+\date{Ιούλιος 2022}
+
+\ntuadoctype{ΔΙΠΛΩΜΑΤΙΚΗ ΕΡΓΑΣΙΑ}
+
+\ntualarge{Ε{\large ΘΝΙΚΟ} Μ{\large ΕΤΣΟΒΙΟ} Π{\large ΟΛΥΤΕΧΝΕΙΟ}}
+\ntuasmall{Ε{\normalsize ΘΝΙΚΟ} Μ{\normalsize ΕΤΣΟΒΙΟ} Π{\normalsize ΟΛΥΤΕΧΝΕΙΟ}}
+\schoollarge{Σ{\normalsize ΧΟΛΗ} Η{\normalsize ΛΕΚΤΡΟΛΟΓΩΝ} Μ{\normalsize ΗΧΑΝΙΚΩΝ}\\ Κ{\normalsize ΑΙ} Μ{\normalsize ΗΧΑΝΙΚΩΝ} Υ{\normalsize ΠΟΛΟΓΙΣΤΩΝ}}
+\schoolsmall{Σ{\small ΧΟΛΗ} Η{\small ΛΕΚΤΡΟΛΟΓΩΝ} Μ{\small ΗΧΑΝΙΚΩΝ} Κ{\small ΑΙ} Μ{\small ΗΧΑΝΙΚΩΝ} Υ{\small ΠΟΛΟΓΙΣΤΩΝ}}
+\deptlarge{Τ{\normalsize ΟΜΕΑΣ} Τ{\normalsize ΕΧΝΟΛΟΓΙΑΣ} Π{\normalsize ΛΗΡΟΦΟΡΙΚΗΣ} Κ{\normalsize ΑΙ} Υ{\normalsize ΠΟΛΟΓΙΣΤΩΝ}}
+\deptsmall{Τ{\small ΟΜΕΑΣ} Τ{\small ΕΧΝΟΛΟΓΙΑΣ} Π{\small ΛΗΡΟΦΟΡΙΚΗΣ} Κ{\small ΑΙ} Υ{\small ΠΟΛΟΓΙΣΤΩΝ}}
+
+\authornominative{Γρηγόριος Π. Θανάσουλας}
+\authortitle{Ηλεκτρολόγος Μηχανικός και Μηχανικός Υπολογιστών ΕΜΠ}
+\authortitlepost{Ηλεκτρολόγος Μηχανικός και Μηχανικός Υπολογιστών ΕΜΠ}
+\advisors{Νεκτάριος Κοζύρης\\ Καθηγητής ΕΜΠ}
+\deptsmall{Τ{\small ΟΜΕΑΣ} Τ{\small ΕΧΝΟΛΟΓΙΑΣ} Π{\small ΛΗΡΟΦΟΡΙΚΗΣ} Κ{\small ΑΙ} Υ{\small ΠΟΛΟΓΙΣΤΩΝ}}
+
+\committeeone{Νεκτάριος Κοζύρης\\ Καθηγητής ΕΜΠ}
+\committeetwo{Γεώργιος Γκούμας\\ Αν. Καθηγητής ΕΜΠ}
+\committeethree{Διονύσιος Πνευματικάτος\\ Καθηγητής ΕΜΠ}
+\submitdate{Εγκρίθηκε από την τριμελή εξεταστική επιτροπή την 14η Ιουλίου 2022.}
+
+\place{Αθήνα}
+\year{2022}
+
+% English
+\entitle{Extensions for Scheduling and Autoscaling\\ on Kubernetes Clusters with Local Storage Considerations}
+\enauthor{Grigorios P. Thanasoulas}
+\endate{July 2022}
+
+\enntuadoctype{DIPLOMA THESIS}
+
+\enntualarge{N{\large ATIONAL} T{\large ECHINCAL} U{\large NIVERSITY OF} A{\large THENS}}
+\enntuasmall{N{\normalsize ATIONAL} T{\normalsize ECHINCAL} U{\normalsize NIVERSITY OF} A{\normalsize THENS}}
+\enschoollarge{S{\normalsize CHOOL OF} E{\normalsize LECTRICAL AND} C{\normalsize OMPUTER} E{\normalsize NGINEERING}}
+\enschoolsmall{S{\small CHOOL OF} E{\small LECTRICAL AND} C{\small OMPUTER} E{\small NGINEERING}}
+\endeptlarge{D{\normalsize IVISION OF} C{\normalsize OMPUTER} S{\normalsize CIENCE}}
+\endeptsmall{D{\small IVISION OF} C{\small OMPUTER} S{\small CIENCE}}
+
+\enauthornominative{Grigorios P. Thanasoulas}
+\enauthortitle{Electrical and Computer Engineer NTUA}
+\enauthortitlepost{Electrical and Computer Engineer NTUA}
+\enadvisors{Nectarios Koziris\\ Professor NTUA}
+\encommitteeone{Nectarios Koziris\\ Professor NTUA}
+\encommitteetwo{Georgios Goumas\\ Associate Professor NTUA}
+\encommitteethree{Dionysios Pnevmatikatos\\ Professor NTUA}
+\ensubmitdate{Approved by the three-member examination committee on the 14th of July 2022.}
+\enplace{Athens}
+\enyear{2022}
+
+% pandoc
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%include PDF files
+\usepackage{pdfpages}
+
+% flaot figures
+\usepackage{float}
+
+\usepackage{multicol} %<<<<<<<<<<<
+
+% algorithms
+\usepackage[]{listings}
+\usepackage[linesnumbered]{algorithm2e}
+% \SetKwIF{If}{ElseIf}{Else}{if~(\endgraf}{\endgraf)~then}{else if}{else}{end if}%
+%\SetKwIF{If}{Else}{if~(\endgraf}{\endgraf)~then}{else}{end if}%
+
+% Modify margin on the left of an enumeration
+\usepackage{enumitem}
+
+% Mutliple lines as input 
+% https://tex.stackexchange.com/questions/64204/mutliple-inputs-with-line-breaking
+\newcommand\myinput[1]{%
+  \settowidth\mylen{\KwIn{}}%
+  \setlength\hangindent{\mylen}%
+  \hspace*{\mylen}#1\\}
+
+\SetEndCharOfAlgoLine{.}
+
+%% Use custom packages
+\lstdefinestyle{myCustomMatlabStyle}{
+  language=Matlab,
+  numbers=left,
+  stepnumber=1,
+  numbersep=10pt,
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false
+}
+\usepackage{amsmath}
+\newcommand{\lar}{\(\leftarrow\)}
+
+
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+
+\newcommand{\co}[1]{\texttt{#1}}
+\newcommand{\tbf}[1]{\textbf{#1}}
+
+%linebreak
+  %\newfontfamily\ttfamily[Scale=.7]{Monaco}
+  %\usepackage{fontspec}
+
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+  \lstset{
+	tabsize=4,
+  numbers=left,
+  stepnumber=1,
+	rulecolor=,
+        basicstyle=\scriptsize\linespread{0.8}\ttfamily,
+        upquote=true,
+        %aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        % keywordstyle=\color[rgb]{0,0,1},
+        keywordstyle=\color{Blue},
+        commentstyle=\color{Gray},
+        stringstyle=\color{Mahogany}
+}
+
+
+%% YAML
+%% https://www.latex4technics.com/?note=187E
+\newcommand\YAMLcolonstyle{\color{Mahogany}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{Blue}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\scriptsize\linespread{0.7}\YAMLkeystyle\ttfamily,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+% https://github.com/Tedxz/xjtuthesis-x/issues/1
+\makeatletter
+\newenvironment{breakablealgorithm}
+  {% \begin{breakablealgorithm}
+   \begin{center}
+     \refstepcounter{algorithm}% New algorithm
+     \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+     \renewcommand{\caption}[2][\relax]{% Make a new \caption
+       {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+       \ifx\relax##1\relax % #1 is \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+       \else % #1 is not \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+       \fi
+       \kern2pt\hrule\kern2pt
+     }
+  }{% \end{breakablealgorithm}
+     \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+   \end{center}
+  }
+\makeatother
+
+
+% Full references
+% Updated definition, see explanation below
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}} % One single link

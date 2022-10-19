@@ -1,0 +1,21 @@
+\begin{algorithm}[H]
+      \caption{The scheduler's VolumeBinding plugin: PreFilter() method}
+      \label{alg:vol-binding-prefilter}
+      \KwIn{\texttt{pod}: the Pod to be scheduled}
+      \KwResult{Update the CycleState of the scheduler with the PVCs the Pod uses.}
+      \begin{enumerate}[leftmargin=0.5cm]
+            \tightlist
+            \item \lIf {the Pod does not reference any PVCs}{return nil}
+            \item Otherwise, split the PVCs into 3 categories:
+                  \begin{enumerate}
+                        \tightlist
+                        \item \co{boundClaims}: PVCs bound with a PV.
+                        \item \co{claimsToBind}: Unbound PVCs with \co{WaitForFirstConsumer}
+                              (delayed) binding mode.
+                        \item \co{unboundClaimsImmediate}: Unbound PVCs with \co{Immediate} binding mode.
+                  \end{enumerate}
+            \item \lIf{\co{unboundClaimsImmediate} is non-empty}{return error; abort the scheduling attempt}
+            \item Store the \co{boundClaims} and \co{claimsToBind} in the \co{CycleState} of the scheduler.
+                  \tightlist
+      \end{enumerate}
+\end{algorithm}

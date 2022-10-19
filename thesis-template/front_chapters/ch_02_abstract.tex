@@ -1,0 +1,38 @@
+\abstract
+\addcontentsline{toc}{chapter}{\abstractname}
+\phantomsection
+% APPROVED
+
+Kubernetes is the de facto container orchestrator choice for every company going
+cloud-native. It can efficiently orchestrate a large number of containers via a
+powerful declarative management interface, reducing operational burdens for the
+cluster admins. 
+
+The Kubernetes storage interface allows the integration of different storage
+systems, which can get used as persistent volumes by the workload. The use of
+local persistent volumes over remote persistent storage offers the benefit of
+performance: local disks offer higher IOPS and throughput and lower latency
+compared to remote storage systems.
+
+Currently, the Cluster Autoscaler does not support autoscaling with local
+storage. Moreover, the Scheduler does not consider the available capacity of
+local storage when scheduling Pods.
+
+Enabling the seamless operation of the Cluster Autoscaler and Scheduler on
+Kubernetes clusters that use local storage systems is crucial for enterprises to
+reduce costs. The local storage will enable their disk-intensive workload to
+complete faster, and the Scheduler will ensure that the workload units run on
+nodes that have the requested storage capacity. At the same time, the Cluster
+Autoscaler will scale the cluster at an appropriate size for the workload to run
+without any excess resource waste.
+
+In this diploma thesis, we propose and implement extensions for the Cluster
+Autoscaler and the Scheduler to seamlessly operate with local storage. During
+this thesis, we deployed the proposed extended Cluster Autoscaler and Scheduler
+to enterprises, and they used it successfully at large production clusters.
+Moreover, we started contributing parts of the proposed design upstream.
+
+\subsection*{Keywords}
+Kubernetes, Cluster Autoscaler, Scheduler, Local Storage, Logical Volume
+Manager, Capacity Tracking
+

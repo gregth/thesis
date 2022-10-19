@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rok
+provisioner: rok.arrikto.com
+parameters:
+  rok/allow-auto-recovery: "false"
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer

@@ -1,0 +1,34 @@
+\begin{algorithm}[ht]
+    \caption{Cluster Autoscaler: UpdateUnneededNodes() method}\label{algo:update-unneeded}
+    \KwIn{\texttt{scaleDownCandidates}: a list of nodes that belong to
+        node groups that have not reached their minimum size }
+    \KwResult{Update the
+        state of the Autoscaler with information about which nodes are unneeded}
+    \begin{enumerate}[leftmargin=0.5cm]
+        \tightlist
+        \item For each node in \texttt{scaleDownCandidates}, call \texttt{checkNodeUtilization()}:
+              \begin{enumerate}[]
+                  \tightlist
+                  \item \lIf{node has the ``ToBeDeletedByClusterAutoscaler'' taint}{ it is currently deleted, continue to next node}
+                  \item \lIf{node has ``cluster-autoscaler.kubernetes.io/scale-down-disabled: true'' annotation}{continue to next node}
+                  \item Calculate the utilization of the node.
+                  \item \lIf{utilization is above threshold}{continue to next node}
+                  \item Add the node \texttt{currentlyUnneededNodes}.
+              \end{enumerate}
+        \item \texttt{currentlyUnneededNonEmptyNodes} \lar From \texttt{currentlyUnneededNodes} select nodes that are not empty, i.e., they do not run only DaemonSet Pods.
+        \item Call \texttt{findNodesToRemove(currentlyUnneededNonEmptyNodes)} to determine nodes that can be removed. For each node:
+              \begin{enumerate}[]
+                  \tightlist%        
+                  \item Get the Pods that are running on the node and for each Pod:
+                        \begin{enumerate}[leftmargin=0.5cm]
+                            \tightlist
+                            \item \lIf{the Pod has a Pod disruption budget that prevents its eviction}{the node is unremovable}
+                            \item Call \texttt{findPlaceFor(pod)} to determine if it can be moved elsewhere.
+                            \item \leIf{the Pod can not be moved elsewhere}{the
+                                      node is unremovable}{the node can be removed, add it to
+                                      \texttt{nodesToRemove}}
+                        \end{enumerate}
+              \end{enumerate}
+        \item For each node in \texttt{nodesToRemove} update the state of the Autoscaler with the duration the node has been unneeded.
+    \end{enumerate}
+\end{algorithm}

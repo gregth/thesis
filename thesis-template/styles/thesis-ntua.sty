@@ -1,0 +1,333 @@
+%
+% NTUA Title Pages - version 20071107
+%
+% Modified by vkoukis, original version by
+% Antony Chazapis <chazapis@cslab.ece.ntua.gr>
+%
+
+\typeout{Document Style for NTUA Title Pages.}
+
+% Variables
+\def\ntuaimage#1{\gdef\@ntuaimage{#1}}
+
+% Greek
+\def\ntuadoctype#1{\gdef\@ntuadoctype{#1}}
+
+\def\ntua#1{\gdef\@ntua{#1}}
+\def\school#1{\gdef\@school{#1}}
+\def\dept#1{\gdef\@dept{#1}}
+\def\ntualarge#1{\gdef\@ntualarge{#1}}
+\def\ntuasmall#1{\gdef\@ntuasmall{#1}}
+\def\schoollarge#1{\gdef\@schoollarge{#1}}
+\def\schoolsmall#1{\gdef\@schoolsmall{#1}}
+\def\deptlarge#1{\gdef\@deptlarge{#1}}
+\def\deptsmall#1{\gdef\@deptsmall{#1}}
+
+\def\authornominative#1{\gdef\@authornominative{#1}}
+\def\authorgender#1{\gdef\@authorgender{#1}}
+\def\authortitle#1{\gdef\@authortitle{#1}}
+\def\authortitlepre#1{\gdef\@authortitlepre{#1}}
+\def\authortitlepost#1{\gdef\@authortitlepost{#1}}
+\def\advisors#1{\gdef\@advisors{#1}}
+\def\committeeone#1{\gdef\@committeeone{#1}}
+\def\committeetwo#1{\gdef\@committeetwo{#1}}
+\def\committeethree#1{\gdef\@committeethree{#1}}
+\def\submitdate#1{\gdef\@submitdate{#1}}
+
+\def\place#1{\gdef\@place{#1}}
+\def\year#1{\gdef\@year{#1}}
+
+% English
+\def\entitle#1{\gdef\@entitle{#1}}
+\def\enauthor#1{\gdef\@enauthor{#1}}
+\def\endate#1{\gdef\@endate{#1}}
+
+\def\enntuadoctype#1{\gdef\@enntuadoctype{#1}}
+
+\def\enntua#1{\gdef\@enntua{#1}}
+\def\enschool#1{\gdef\@enschool{#1}}
+\def\endept#1{\gdef\@endept{#1}}
+\def\enntualarge#1{\gdef\@enntualarge{#1}}
+\def\enntuasmall#1{\gdef\@enntuasmall{#1}}
+\def\enschoollarge#1{\gdef\@enschoollarge{#1}}
+\def\enschoolsmall#1{\gdef\@enschoolsmall{#1}}
+\def\endeptlarge#1{\gdef\@endeptlarge{#1}}
+\def\endeptsmall#1{\gdef\@endeptsmall{#1}}
+
+\def\enauthornominative#1{\gdef\@enauthornominative{#1}}
+\def\enauthorgender#1{\gdef\@enauthorgender{#1}}
+\def\enauthortitle#1{\gdef\@enauthortitle{#1}}
+\def\enauthortitlepre#1{\gdef\@enauthortitlepre{#1}}
+\def\enauthortitlepost#1{\gdef\@enauthortitlepost{#1}}
+\def\enadvisors#1{\gdef\@enadvisors{#1}}
+\def\encommitteeone#1{\gdef\@encommitteeone{#1}}
+\def\encommitteetwo#1{\gdef\@encommitteetwo{#1}}
+\def\encommitteethree#1{\gdef\@encommitteethree{#1}}
+\def\ensubmitdate#1{\gdef\@ensubmitdate{#1}}
+
+\def\enplace#1{\gdef\@enplace{#1}}
+\def\enyear#1{\gdef\@enyear{#1}}
+
+% Default values
+
+\def\@ntuaimage{pyrforos.pdf}
+
+% Greek
+\def\@title{Χωρίς τίτλο}
+\def\@author{Χωρίς συγγραφέα}
+\def\@date{Χωρίς ημερομηνία}
+
+\def\@ntuadoctype{ΔΙΠΛΩΜΑΤΙΚΗ ΕΡΓΑΣΙΑ}
+
+\def\@authornominative{~}
+\def\@authorgender{*}
+%\def\@authorgender{του}
+\def\@authortitle{~}
+\def\@authortitlepre{*}
+\def\@authortitlepost{*}
+
+\def\@ntua{Εθνικό Μετσόβιο Πολυτεχνείο}
+\def\@school{Σχολή Ηλεκτρολόγων Μηχανικών Και Μηχανικών Υπολογιστών}
+\def\@dept{Τομέας Πληροφορικής Και Τεχνολογίας Υπολογιστών}
+\def\@ntualarge{*}
+\def\@ntuasmall{*}
+\def\@schoollarge{*}
+\def\@schoolsmall{*}
+\def\@deptlarge{*}
+\def\@deptsmall{*}
+
+\def\@advisors{*}
+\def\@committeeone{*}
+\def\@committeetwo{*}
+\def\@committeethree{*}
+\def\@submitdate{~}
+
+\def\@place{*}
+\def\@year{*}
+
+% English
+\def\@entitle{No title}
+\def\@enauthor{No author}
+\def\@endate{No date}
+
+\def\@enntuadoctype{DIPLOMA THESIS}
+
+\def\@enauthornominative{~}
+\def\@enauthorgender{*}
+\def\@enauthortitle{~}
+\def\@enauthortitlepre{*}
+\def\@enauthortitlepost{*}
+
+\def\@enntua{National Technical Unicersity of Athens}
+\def\@enschool{School of Electrical and Computer Engineering}
+\def\@endept{Division of Computer Science}
+\def\@enntualarge{*}
+\def\@enntuasmall{*}
+\def\@enschoollarge{*}
+\def\@enschoolsmall{*}
+\def\@endeptlarge{*}
+\def\@endeptsmall{*}
+
+\def\@enadvisors{*}
+\def\@encommitteeone{*}
+\def\@encommitteetwo{*}
+\def\@encommitteethree{*}
+\def\@ensubmitdate{~}
+
+\def\@enplace{*}
+\def\@enyear{*}
+
+% Headers and commonly used structures 
+
+\def\ntuaheaderlarge{
+   \begin{center}
+      \noindent
+      \includegraphics[width=2.5cm, height=2.5cm]{\@ntuaimage}\smallskip\\
+      {\Large \textbf{\textsc{\if*\@ntualarge \@ntua \else \@ntualarge \fi}}}\smallskip\\
+      {\large \textsc{\if*\@schoollarge \@school \else \@schoollarge \fi}}\smallskip\\
+      {\large \textsc{\if*\@deptlarge \@dept \else \@deptlarge \fi}}\smallskip\\
+   \end{center}
+   \vfill
+}
+
+\def\enntuaheaderlarge{
+   \begin{center}
+      \noindent
+      \includegraphics[width=2.5cm, height=2.5cm]{\@ntuaimage}\smallskip\\
+      {\Large \textbf{\textsc{\if*\@enntualarge \@enntua \else \@enntualarge \fi}}}\smallskip\\
+      {\large \textsc{\if*\@enschoollarge \@enschool \else \@enschoollarge \fi}}\smallskip\\
+      {\large \textsc{\if*\@endeptlarge \@endept \else \@endeptlarge \fi}}\smallskip\\
+   \end{center}
+   \vfill
+}
+
+\def\ntuaheadersmall{
+   \begin{minipage}[c]{2.2cm}
+      \includegraphics[width=2cm, height=2cm]{\@ntuaimage}
+   \end{minipage}
+   \begin{minipage}[c]{\textwidth}
+      {\large \textsc{\if*\@ntuasmall \@ntua \else \@ntuasmall \fi}}\smallskip\\ 
+      {\normalsize \textsc{\if*\@schoolsmall \@school \else \@schoolsmall \fi}}\smallskip\\ 
+      {\normalsize \textsc{\if*\@deptsmall \@dept \else \@deptsmall \fi}}
+   \end{minipage}
+   \vfill
+}
+
+\def\enntuaheadersmall{
+   \begin{minipage}[c]{2.2cm}
+      \includegraphics[width=2cm, height=2cm]{\@ntuaimage}
+   \end{minipage}
+   \begin{minipage}[c]{\textwidth}
+      {\large \textsc{\if*\@enntuasmall \@enntua \else \@enntuasmall \fi}}\smallskip\\ 
+      {\normalsize \textsc{\if*\@enschoolsmall \@enschool \else \@enschoolsmall \fi}}\smallskip\\ 
+      {\normalsize \textsc{\if*\@endeptsmall \@endept \else \@endeptsmall \fi}}
+   \end{minipage}
+   \vfill
+}
+
+\def\ntuatitle{
+   {\Large \textbf{\@title}}\\
+   \vfill
+   {\normalsize \@ntuadoctype}\smallskip\\
+   \vfill
+   {\normalsize \if*\@authorgender ~ \else \@authorgender \fi}\smallskip\\
+   {\large \textbf{\@author}}\smallskip\\
+   % {\normalsize \if*\@authortitlepre \@authortitle \else \@authortitlepre \fi}\\
+}
+
+\def\enntuatitle{
+   {\Large \textbf{\@entitle}}\\
+   \vfill
+   {\normalsize \@enntuadoctype}\smallskip\\
+   \vfill
+   {\normalsize \if*\@enauthorgender ~ \else \@enauthorgender \fi}\smallskip\\
+   {\large \textbf{\@enauthor}}\smallskip\\
+   % {\normalsize \if*\@enauthortitlepre \@enauthortitle \else \@enauthortitlepre \fi}\\
+}
+
+\def\ntuadate{
+   {\normalsize \if*\@place \@date \else \@place,~\@date \fi}\\
+}
+
+\def\enntuadate{
+   {\normalsize \if*\@enplace \@endate \else \@enplace,~\@endate \fi}\\
+}
+
+\def\ntuaadvisors{
+   \begin{minipage}[t]{0.39\textwidth}
+      \noindent\small\textbf{Επιβλέπων:} \\
+   \end{minipage}
+   \begin{minipage}[t]{0.59\textwidth}
+      \noindent\small \@advisors \\
+   \end{minipage}
+   \begin{minipage}[t]{0.99\textwidth}
+      \noindent\small \@submitdate \\
+   \end{minipage}
+}
+
+\def\enntuaadvisors{
+   \begin{minipage}[t]{0.39\textwidth}
+      \noindent\small\textbf{Supervisor} \\
+   \end{minipage}
+   \begin{minipage}[t]{0.59\textwidth}
+      \noindent\small \@enadvisors \\
+   \end{minipage}
+   \begin{minipage}[t]{0.99\textwidth}
+      \noindent\small \@ensubmitdate \\
+   \end{minipage}
+}
+
+%\def\ntuasign#1{\parbox[c]{0.33\textwidth}{\small$\ldots$\\ {#1}}}
+\newcommand{\ntuasign}[1]{
+   \if*#1 ~ \else
+   \begin{minipage}[t]{0.33\textwidth}
+      \noindent\small~\\ $\ldots\ldots\ldots\ldots$\\ {#1}
+   \end{minipage}
+   \fi
+}
+
+\def\ntuacommittee{
+      \begin{tabular}[h]{p{0.33\textwidth} p{0.33\textwidth} p{0.33\textwidth}}
+         \ntuasign{\@committeeone} & \ntuasign{\@committeetwo} & \ntuasign{\@committeethree}
+      \end{tabular}
+}
+
+\def\enntuacommittee{
+      \begin{tabular}[h]{p{0.33\textwidth} p{0.33\textwidth} p{0.33\textwidth}}
+         \ntuasign{\@encommitteeone} & \ntuasign{\@encommitteetwo} & \ntuasign{\@encommitteethree}
+      \end{tabular}
+}
+
+% Pages
+
+\def\emptypage{
+   \newpage
+   \thispagestyle{empty}
+}
+
+\def\ntuafirstpage{
+   \begin{titlepage}
+      \begin{center}
+         \ntuaheaderlarge
+         \ntuatitle
+         \vfill
+         \ntuadate
+      \end{center}
+   \end{titlepage}
+}
+
+\def\enntuafirstpage{
+   \begin{titlepage}
+      \begin{center}
+         \enntuaheaderlarge
+         \enntuatitle
+         \vfill
+         \enntuadate
+      \end{center}
+   \end{titlepage}
+}
+
+\def\ntuasecondpage{
+   \emptypage
+   \ntuaheadersmall
+   \begin{center}
+      \ntuatitle
+      \vfill
+      \if*\@advisors ~ \else \ntuaadvisors \fi
+      \ntuacommittee
+      \vfill
+      \ntuadate
+   \end{center}
+}
+
+\def\enntuasecondpage{
+   \emptypage
+   \enntuaheadersmall
+   \begin{center}
+      \enntuatitle
+      \vfill
+      \if*\@advisors ~ \else \enntuaadvisors \fi
+      \enntuacommittee
+      \vfill
+      \enntuadate
+   \end{center}
+}
+
+
+\def\ntuathirdpage{
+   \emptypage
+   ~
+   \vfill
+   {\normalsize\noindent$\ldots\ldots\ldots\ldots$}\smallskip\\
+   {\small\noindent\textbf{\@authornominative}\\ \if*\@authortitlepost \@authortitle \else \@authortitlepost \fi}\\
+   \vfill
+   {\small\noindent Copyright © \@authornominative\if*\@year ~ \else ,~\@year \fi\\
+Με επιφύλαξη παντός δικαιώματος. All rights reserved.
+\ \ \\
+\noindent Απαγορεύεται η αντιγραφή, αποθήκευση και διανομή της παρούσας εργασίας, εξ ολοκλήρου ή τμήματος αυτής, για εμπορικό σκοπό.  Επιτρέπεται η ανατύπωση, αποθήκευση και διανομή για σκοπό μη κερδοσκοπικό, εκπαιδευτικής ή ερευνητικής φύσης, υπό την προϋπόθεση να αναφέρεται η πηγή προέλευσης και να διατηρείται το παρόν μήνυμα.  Ερωτήματα που αφορούν τη χρήση της εργασίας για κερδοσκοπικό σκοπό πρέπει να απευθύνονται προς τον συγγραφέα.
+\smallskip\\\\
+\noindent Οι απόψεις και τα συμπεράσματα που περιέχονται σε αυτό το έγγραφο εκφράζουν τον συγγραφέα και δεν πρέπει να ερμηνευθεί ότι αντιπροσωπεύουν τις επίσημες θέσεις του Εθνικού Μετσόβιου Πολυτεχνείου.
+   }
+}
+
+\renewcommand\maketitle{\ntuafirstpage\emptypage~\ntuasecondpage\emptypage~\enntuafirstpage\emptypage~\enntuasecondpage\ntuathirdpage}

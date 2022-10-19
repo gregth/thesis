@@ -1,0 +1,58 @@
+\chapter{Conclusion} \label{chapter:conclusion}
+
+Our journey has finally reached its end. In this chapter, we will restate our
+contributions and summarize what our mechanism offers. Finally, we will close
+this thesis by mentioning future work that can be done to enrich our mechanism
+and bring it to its full potential.
+
+\section{Concluding Remarks} \label{section:conclusion_concluding_remarks}
+
+All in all, the primary goal of this thesis was to implement a design that would
+enable seamless cluster autoscaling and scheduling with local persistent
+storage. Not only did we achieve this goal, but our implementation was
+successfully deployed to large production clusters of enterprises that requested
+the feature.
+
+Although the design we implemented is coupled with the Rok software --since it
+provides an efficient mechanism for migrating local volumes around a cluster--,
+the concepts and the design can be generalized to work with any other local
+storage system. Our long-term goal, which extends beyond the context of this
+thesis, is to generalize the design and push it upstream. That is a process that
+we started to be involved in; we attend the meetings of the Kubernetes Storage
+\footnote{https://github.com/kubernetes/community/blob/master/sig-storage/README.md}
+and Autoscaling
+\footnote{https://github.com/kubernetes/community/blob/master/sig-autoscaling/README.md}
+Special Interest Groups, interacted with them on GitHub and plan to contribute
+the whole design upstream actively. At the moment this text is written, we have
+a few first Pull Requests merged
+\footnote{https://github.com/kubernetes/autoscaler/pull/4877}
+\footnote{https://github.com/kubernetes/autoscaler/pull/4842}.
+
+\section{Future Work} \label{section:conclusion_future_work}
+
+So far, we have implemented various enhancements for the Kubernetes Scheduler
+and the Cluster Autoscaler, but there is always room for improvement. Since this
+is an iterative process, in next iterations, we would like to offer these
+enhancements:
+
+\begin{itemize}
+      \item Extend the Scheduler to reserve the storage (in the \co{Reserve}
+            phase of the scheduling cycle) when scheduling a Pod to prevent race
+            conditions.
+      \item Extend the Cluster Autoscaler to consider the storage needed for the
+            PVCs of multiple Pods when scaling down. The current design only
+            checks if a single Pod's PVs can fit a node, but not if the PVs of
+            multiple Pods fit a node. Although a wrong decision to scale down
+            will be reverted by a subsequent scale-up, taking the decision would
+            be much more effective.
+      \item Extend the current implementation of the \co{Estimator} interface,
+            i.e., the \co{BinPackingEstimator}, to consider the storage and
+            calculate how many nodes are needed for the storage requests of
+            multiple Pods of a StatefulSet. The current design adds nodes one by
+            one till all the Pods get the requested storage. It would be much
+            more efficient to know the number of nodes needed beforehand and add
+            them to the cluster all at once.
+\end{itemize}
+
+Finally, as we already mentioned, our high-priority goal is to merge this work
+upstream.

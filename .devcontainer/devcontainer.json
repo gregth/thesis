@@ -1,0 +1,6 @@
+ {
+ // Container user VS Code should use when connecting
+   // Default path to open when attaching to a new container.
+ "workspaceFolder": "/diplom",
+ "remoteUser": "gregth",
+ }
