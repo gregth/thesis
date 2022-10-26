@@ -1,0 +1,31 @@
+# Start with one node in the cluster:
+aws eks update-nodegroup-config --cluster-name  arrikto-cluster-gregth --nodegroup-name general-workers --scaling-config desiredSize=1,minSize=0
+
+kubectl version --short
+kubectl describe nodes
+
+##### Show nodes space ######
+watch ./node-stats.sh
+
+###### 2 namespaces: #######
+- before: not admitted
+- after: admitted by the Rok Scheduler Webhook
+
+###### Show before ########
+watch kubectl get pvc -n before
+kubectl apply -f pod-before.yaml
+kubectl describe pvc -n before
+kubectl describe pod -n before
+
+###### Show after ########
+kubectl apply -f pod-after.yaml
+kubectl describe pod -n after
+# The autoscaler does nod scale up
+kubectl logs -n kube-system deploy/cluster-autoscaler  -f | grep pod-1
+
+# Apply the new autoscaler and see what changes 
+kubectl apply -f autoscaler-after.yaml
+kubectl describe pod -n after
+
+## Wait while we ask questions
+kubectl delete pod -n after pod-1

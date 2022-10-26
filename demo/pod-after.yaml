@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-a
+  namespace: after  
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: rok
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-b
+  namespace: after 
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: rok
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  namespace: after 
+spec:
+  containers:
+  - image: nginx
+    name: container
+    volumeMounts:
+    - mountPath: /home/jovyan
+      name: volume-a
+    - mountPath: /home/jovyan-b
+      name: volume-b
+  volumes:
+  - name: volume-a
+    persistentVolumeClaim:
+      claimName: pvc-a
+  - name: volume-b
+    persistentVolumeClaim:
+      claimName: pvc-b

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+  - image: nginx
+    imagePullPolicy: IfNotPresent
+    name: container
+    volumeMounts:
+    - mountPath: /home/jovyan
+      name: volume-a
+  volumes:
+  - name: volume-a
+    persistentVolumeClaim:
+      claimName: pvc-a
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-a
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: rok
+  volumeMode: Filesystem

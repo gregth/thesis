@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cluster-autoscaler
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: cluster-autoscaler
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "8085"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app: cluster-autoscaler
+    spec:
+      containers:
+      - command:
+        - ./cluster-autoscaler
+        - --v=5
+        - --stderrthreshold=info
+        - --cloud-provider=$(CLOUD_PROVIDER)
+        - --skip-nodes-with-local-storage=false
+        - --expander=least-waste
+        - --node-group-auto-discovery=$(NODEGROUP_AUTODISCOVERY)
+        - --skip-nodes-with-system-pods=false
+        - --unremovable-node-recheck-timeout=1m
+        - --scale-down-unneeded-time=2m
+        - --scale-down-unready-time=-1s
+        - --scale-down-delay-after-add=2m
+        - --aws-use-static-instance-list=true
+        - --max-pod-eviction-time=$(MAX_POD_EVICTION_TIMEOUT)
+        envFrom:
+        - configMapRef:
+            name: cluster-autoscaler-gkf2cg2tm4
+        image: gcr.io/arrikto-playground/cluster-autoscaler:1.19.1-20-g4d2d01c76-amd64 
+        imagePullPolicy: Always
+        name: cluster-autoscaler
+        resources:
+          limits:
+            cpu: 100m
+            memory: 300Mi
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/ssl/certs/ca-certificates.crt
+          name: ssl-certs
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: cluster-autoscaler
+      serviceAccountName: cluster-autoscaler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /etc/ssl/certs/ca-bundle.crt
+          type: ""
+        name: ssl-certs
